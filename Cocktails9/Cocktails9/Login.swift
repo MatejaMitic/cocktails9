@@ -7,16 +7,15 @@
 
 import SwiftUI
 
-struct Login: View {
+struct LoginView: View {
     
     @State private var username: String = ""
     @State private var password: String = ""
-    @State private var isLoggedIn: Bool = false
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
     @State private var showRegisterView: Bool = false
     @State private var currentImageName: String = "cocktailP1"
-        
+    
     
     // Sample credentials for demonstration
     let validUsername = "user"
@@ -49,10 +48,10 @@ struct Login: View {
                 Spacer()
                 
                 Image(currentImageName)
-                        .resizable()
-                        .scaledToFit()
-                        .animation(.easeInOut, value: currentImageName)
-                        
+                    .resizable()
+                    .scaledToFit()
+                    .animation(.easeInOut, value: currentImageName)
+                
                 
                 Button(action: {
                     showRegisterView = true
@@ -60,7 +59,7 @@ struct Login: View {
                     Text("Don't have an account? Register")
                         .foregroundColor(.blue)
                         .font(.footnote)
-                    }
+                }
                 .navigationDestination(isPresented: $showRegisterView) {
                     Register()
                     
@@ -81,6 +80,7 @@ struct Login: View {
     
     
     private func login() {
+        var isLoggedIn = false
         if username == validUsername && password == validPassword {
             isLoggedIn = true
             // Only update alert message if login fails
@@ -94,15 +94,15 @@ struct Login: View {
             showAlert = true
         }
         withAnimation{
-            currentImageName = (currentImageName == "cocktailP1") ? "cocktailP2" : "cocktailP1"
+            currentImageName = (isLoggedIn) ? "cocktailP2" : "cocktailP1"
         }
     }
     
-
+    
 }
 
 
 
 #Preview {
-    Login()
+    LoginView()
 }
