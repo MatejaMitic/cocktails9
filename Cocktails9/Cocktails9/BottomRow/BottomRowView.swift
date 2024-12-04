@@ -43,7 +43,7 @@ struct BottomRowView: View {
                     .tag(1)
                 
                 ProfileView()
-                    .tag(3)
+                    .tag(2)
             }
         }
         ZStack{
