@@ -12,12 +12,13 @@ struct TopRowView: View {
     @State private var isFiltering: Bool = false  // For handling filter state
     
     var body: some View {
+        NavigationStack {
             HStack {
                 Text("Cocktails9")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
-                    .padding(.leading, 10)  
+                    .padding(.leading, 10)
                 
                 Spacer()
                 
@@ -29,7 +30,6 @@ struct TopRowView: View {
                         .font(.title)
                         .foregroundColor(.primary)
                         .padding()
-                        //.background(Circle().fill(Color.blue.opacity(0.1)))
                 }
                 .padding(.trailing, 10) // Padding to the right
                 
@@ -41,17 +41,19 @@ struct TopRowView: View {
                     Image(systemName: "line.horizontal.3.decrease.circle")
                         .font(.title)
                         .foregroundColor(.primary)
-                        .padding()
+                    
                 }
-                .padding(.trailing, 10)
+                
             }
-            .padding(.top, 20)
-            .background(Color.green.opacity(0.0))
+            .background(Color.clear)
+            .padding(.top)
             .padding(.horizontal)
-            
-            Spacer()
+            .padding(.trailing)
         }
         
+        Spacer()
+    }
+    
 }
 
 #Preview {
