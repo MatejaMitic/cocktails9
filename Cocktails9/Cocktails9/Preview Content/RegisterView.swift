@@ -8,6 +8,7 @@ struct RegisterView: View {
     @State private var alertMessage: String = ""
     @State private var showRegisterView: Bool = false
     @State private var currentImageName: String = "bela casa"
+    @AppStorage("currentUser") private var currentUserData: Data?
     
     // Private function to retrieve user from UserDefaults
     private func getUser(for email: String) -> User? {
@@ -26,6 +27,7 @@ struct RegisterView: View {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(user) {
             UserDefaults.standard.set(encoded, forKey: user.email)
+            currentUserData = encoded
         }
     }
     
@@ -49,8 +51,10 @@ struct RegisterView: View {
             return
         }
         
-        let newUser = User(email: email, username: username, password: password)
+        // Create new user with empty favorite cocktails list
+        let newUser = User(email: email, username: username, password: password, favoriteCocktails: [])
         
+        // Save the new user
         addUser(newUser)
         
         email = ""
@@ -60,7 +64,6 @@ struct RegisterView: View {
         withAnimation {
             currentImageName = (currentImageName == "bela casa") ? "koka" : "bela casa"
         }
-        
     }
     
     private func isValidEmail(_ email: String) -> Bool {
