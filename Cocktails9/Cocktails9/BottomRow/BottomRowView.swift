@@ -34,16 +34,18 @@ struct BottomRowView: View {
     
     
     var body: some View {
-        ZStack(alignment: .bottom){
-            TabView(selection: $selectedTab) {
-                HomeView()
-                    .tag(0)
-                
-                FavoritesView()
-                    .tag(1)
-                
-                ProfileView()
-                    .tag(2)
+        NavigationStack {
+            ZStack(alignment: .bottom){
+                TabView(selection: $selectedTab) {
+                    HomeView()
+                        .tag(0)
+                    
+                    FavoritesView()
+                        .tag(1)
+                    
+                    ProfileView()
+                        .tag(3)
+                }
             }
         }
         ZStack{
