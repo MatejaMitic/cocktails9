@@ -9,13 +9,14 @@ import SwiftUI
 
 struct LoginView: View {
     
-    @State private var username: String = ""
+    @State private var email: String = ""
     @State private var password: String = ""
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
     @State private var showRegisterView: Bool = false
     @State private var currentImageName: String = "cocktailP1"
     @State private var isLoggedIn: Bool = false
+    @State private var navigateToMain: Bool = false;
     
     
     var body: some View {
@@ -24,7 +25,7 @@ struct LoginView: View {
                 Text("LoGin")
                     .font(.system(size: 60, weight: .black, design: .rounded))
                 
-                TextField("Username", text: $username)
+                TextField("Email", text: $email)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
@@ -59,7 +60,13 @@ struct LoginView: View {
                 }
                 .navigationDestination(isPresented: $showRegisterView) {
                     RegisterView()
+                        .navigationBarBackButtonHidden(true)
                 }
+                .navigationDestination(isPresented: $navigateToMain) {
+                    MainTabView()
+                        .navigationBarBackButtonHidden(true)
+                }
+                
             }
             .padding(.top, 150.0)
             .padding(.horizontal, 20)
@@ -74,28 +81,32 @@ struct LoginView: View {
     
     
     private func login() {
-        if let loadedUser = UserManager.loadUser() {
-            if username == loadedUser.username && password == loadedUser.password {
-                isLoggedIn = true
-                // Successful login, do nothing (just keep going to the next screen or update the UI)
-                alertMessage = ""
-                showAlert = false
-            } else {
-                alertMessage = "Invalid credentials. Please try again."
-                showAlert = true
-            }
+        // Load all users from UserDefaults
+        if let user = UserManager.loadUser(email: email) {
+                if email == user.email && password == user.password {
+                    isLoggedIn = true
+                    alertMessage = ""
+                    showAlert = false
+                    navigateToMain = true
+                    withAnimation {
+                        currentImageName = "cocktailP2"
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        navigateToMain = true
+                    }
+                    return
+                }
+            alertMessage = "Invalid credentials. Please try again."
+            showAlert = true
         } else {
-            alertMessage = "No user found. Please register first."
+            alertMessage = "No users found. Please register first."
             showAlert = true
         }
-    
-    withAnimation{
-        currentImageName = (isLoggedIn) ? "cocktailP2" : "cocktailP1"
     }
 }
 
 
-}
+
 
 
 
