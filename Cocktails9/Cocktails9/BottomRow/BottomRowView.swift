@@ -74,15 +74,14 @@ extension BottomRowView{
             Image(systemName: imageName)
                 .resizable()
                 .renderingMode(.template)
-                .foregroundColor(isActive ? .black : .gray)
                 .frame(width: 20, height: 20)
             if isActive{
                 Text(title)
                     .font(.system(size: 14))
-                    .foregroundColor(isActive ? .black : .gray)
             }
             Spacer()
         }
+        .foregroundColor(isActive ? .black : .gray)
         .frame(width: isActive ? .infinity : 60, height: 60)
         .background(isActive ? .green.opacity(0.2) : .clear)
         .cornerRadius(30)
