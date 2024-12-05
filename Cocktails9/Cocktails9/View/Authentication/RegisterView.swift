@@ -8,6 +8,8 @@ struct RegisterView: View {
     @State private var alertMessage: String = ""
     @State private var showRegisterView: Bool = false
     @State private var currentImageName: String = "bela casa"
+    @Environment(\.dismiss) private var dismiss
+
     
     // Private function to retrieve user from UserDefaults
     private func getUser(for email: String) -> User? {
@@ -51,7 +53,7 @@ struct RegisterView: View {
         
         let newUser = User(email: email, username: username, password: password)
         
-        addUser(newUser)
+        UserManager.saveUser(newUser)
         
         email = ""
         username = ""
@@ -117,7 +119,7 @@ struct RegisterView: View {
                     .animation(.easeInOut, value: currentImageName)
                 
                 Button(action: {
-                    showRegisterView = true
+                    dismiss()
                 }) {
                     Text("Already have an account? Login")
                         .foregroundColor(.blue)
@@ -125,7 +127,7 @@ struct RegisterView: View {
                         .padding(.top)
                 }
                 .navigationDestination(isPresented: $showRegisterView) {
-                    Text("Login View Goes Here")
+                    
                 }
                 .padding(.top)
             }

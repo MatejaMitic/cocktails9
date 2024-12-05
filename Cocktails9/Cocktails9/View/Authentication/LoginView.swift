@@ -15,11 +15,8 @@ struct LoginView: View {
     @State private var alertMessage: String = ""
     @State private var showRegisterView: Bool = false
     @State private var currentImageName: String = "cocktailP1"
+    @State private var isLoggedIn: Bool = false
     
-    
-    // Sample credentials for demonstration
-    let validUsername = "user"
-    let validPassword = "123"
     
     var body: some View {
         NavigationStack {
@@ -61,15 +58,12 @@ struct LoginView: View {
                         .font(.footnote)
                 }
                 .navigationDestination(isPresented: $showRegisterView) {
-                    Register()
-                    
+                    RegisterView()
                 }
-                
             }
             .padding(.top, 150.0)
             .padding(.horizontal, 20)
             .background(Color.green.opacity(0.2))
-            
             
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Login Failed"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
@@ -80,25 +74,27 @@ struct LoginView: View {
     
     
     private func login() {
-        var isLoggedIn = false
-        if username == validUsername && password == validPassword {
-            isLoggedIn = true
-            // Only update alert message if login fails
-            alertMessage = "" // Clear any previous alert message
+        if let loadedUser = UserManager.loadUser() {
+            if username == loadedUser.username && password == loadedUser.password {
+                isLoggedIn = true
+                // Successful login, do nothing (just keep going to the next screen or update the UI)
+                alertMessage = ""
+                showAlert = false
+            } else {
+                alertMessage = "Invalid credentials. Please try again."
+                showAlert = true
+            }
         } else {
-            isLoggedIn = false
-            alertMessage = "Invalid credentials. Please try again."
-        }
-        
-        if !isLoggedIn {
+            alertMessage = "No user found. Please register first."
             showAlert = true
         }
-        withAnimation{
-            currentImageName = (isLoggedIn) ? "cocktailP2" : "cocktailP1"
-        }
+    
+    withAnimation{
+        currentImageName = (isLoggedIn) ? "cocktailP2" : "cocktailP1"
     }
-    
-    
+}
+
+
 }
 
 
