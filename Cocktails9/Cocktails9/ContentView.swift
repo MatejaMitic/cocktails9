@@ -10,7 +10,12 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         NavigationStack {
-            LoginView()
+            VStack {
+                TopRowView()
+                
+                BottomRowView()
+            }
+            .background(Color.green.opacity(0.2))
         }
     }
 }
