@@ -5,6 +5,7 @@ struct GridItemView: View {
     @State var user: User
     
     var body: some View {
+        let isFavourite = user.favoriteCocktails.contains(where: { $0.id == drink.id })
         VStack(alignment: .leading) {
             AsyncImage(url: URL(string: drink.imageUrl)) { image in
                 image.resizable().scaledToFit()
@@ -27,16 +28,14 @@ struct GridItemView: View {
                 Spacer()  // Push the favorite button to the right side
                 
                 Button(action: {
-                    drink.toggleFavourite()
-                    
-                    if drink.isFavourite {
-                        user = UserManager.addFavoriteDrink(to: user, drink: drink)
-                    } else {
+                    if isFavourite {
                         user = UserManager.removeFavoriteDrink(from: user, drink: drink)
+                    } else {
+                        user = UserManager.addFavoriteDrink(to: user, drink: drink)
                     }
                 }) {
-                    Image(systemName: drink.isFavourite ? "heart.fill" : "heart")
-                        .foregroundColor(drink.isFavourite ? .red : .gray)
+                    Image(systemName: isFavourite ? "heart.fill" : "heart")
+                        .foregroundColor(isFavourite ? .red : .gray)
                         //.padding(5)  
                 }
             }

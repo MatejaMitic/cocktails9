@@ -26,8 +26,14 @@ class UserManager {
            let decodedUser = try? JSONDecoder().decode(User.self, from: savedUserData) {
             return decodedUser
         }
-        return nil
+        else {
+             return User(email: "mockuser@example.com",
+                        username: "mockuser",
+                        password: "password123",
+                        favoriteCocktails: [])
+        }
     }
+
     
     // Add a drink to the user's list of favorites
     static func addFavoriteDrink(to user: User, drink: Drink) -> User {

@@ -16,7 +16,6 @@ struct Drink: Codable, Identifiable {
     let id: String
     let name: String
     let imageUrl: String
-    var isFavourite: Bool = false
     
     enum CodingKeys: String, CodingKey {
         case id = "idDrink"
@@ -35,10 +34,6 @@ struct Drink: Codable, Identifiable {
         self.id = try container.decode(String.self, forKey: .id)
         self.name = try container.decode(String.self, forKey: .name)
         self.imageUrl = try container.decode(String.self, forKey: .imageUrl)
-    }
-    
-    mutating func toggleFavourite() {
-        self.isFavourite.toggle()
     }
 
 }
