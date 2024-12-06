@@ -3,7 +3,6 @@ import SwiftUI
 struct DrinksGrid: View {
     @StateObject private var networkManager = NetworkManager()
     @State private var user: User?
-    //@AppStorage("currentUser") private var currentUserData: Data?
     
     let columns = [
         GridItem(.flexible()),
@@ -28,12 +27,12 @@ struct DrinksGrid: View {
                 .padding()
                 .onAppear {
                     Task {
-                        await networkManager.fetchDrinks()
                         user = UserManager.loadUser()
+                        await networkManager.fetchDrinks()
                     }
                 }
             }
-         }
+        }
     }
 }
 

@@ -27,13 +27,15 @@ class UserManager {
             return decodedUser
         }
         else {
-             return User(email: "mockuser@example.com",
-                        username: "mockuser",
-                        password: "password123",
-                        favoriteCocktails: [])
+            let user =  User(email: "mockuser@example.com",
+                             username: "mockuser",
+                             password: "password123",
+                             favoriteCocktails: [])
+            UserManager.saveUser(user)
+            return user
         }
     }
-
+    
     
     // Add a drink to the user's list of favorites
     static func addFavoriteDrink(to user: User, drink: Drink) -> User {
