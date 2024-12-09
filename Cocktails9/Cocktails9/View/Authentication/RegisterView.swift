@@ -9,6 +9,7 @@ struct RegisterView: View {
     @State private var showRegisterView: Bool = false
     @State private var currentImageName: String = "bela casa"
     @Environment(\.dismiss) private var dismiss
+    @State private var navigateToMain: Bool = false;
 
     
     // Private function to retrieve user from UserDefaults
@@ -61,6 +62,9 @@ struct RegisterView: View {
         
         withAnimation {
             currentImageName = (currentImageName == "bela casa") ? "koka" : "bela casa"
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            navigateToMain = true //
         }
         
     }
@@ -129,6 +133,10 @@ struct RegisterView: View {
                 .navigationDestination(isPresented: $showRegisterView) {
                     
                 }
+                .navigationDestination(isPresented: $navigateToMain) {
+                    MainTabView()
+                        .navigationBarBackButtonHidden(true)
+                }
                 .padding(.top)
             }
             .padding(.horizontal, 20)
@@ -137,6 +145,7 @@ struct RegisterView: View {
                 Alert(title: Text("Registration Status"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
             }
             .animation(.easeInOut(duration: 0.5), value: currentImageName)
+            
         }
     }
 }
