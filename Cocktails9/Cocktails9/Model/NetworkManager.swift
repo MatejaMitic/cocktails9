@@ -3,7 +3,11 @@ import Foundation
 import SwiftUI
 
 class NetworkManager: ObservableObject {
+    
+    static let shared = NetworkManager()
+    
     @Published var drinks: [Drink] = []
+    @Published var user: User?
     
     // Fetch drinks from the API
     func fetchDrinks() async {

@@ -2,10 +2,10 @@ import SwiftUI
 
 struct GridItemView: View {
     @State var drink: Drink
-    @State var user: User
+    @StateObject var networkManager = NetworkManager.shared
     
     var body: some View {
-        let isFavourite = user.favoriteCocktails.contains(where: { $0.id == drink.id })
+        let isFavourite = networkManager.user?.favoriteCocktails.contains(where: { $0.id == drink.id }) ?? false
         VStack(alignment: .leading) {
             AsyncImage(url: URL(string: drink.imageUrl)) { image in
                 image.resizable().scaledToFit()
@@ -29,9 +29,15 @@ struct GridItemView: View {
                 
                 Button(action: {
                     if isFavourite {
-                        user = UserManager.removeFavoriteDrink(from: user, drink: drink)
+                        guard let user = networkManager.user else {
+                            return
+                        }
+                        networkManager.user = UserManager.removeFavoriteDrink(from: user, drink: drink)
                     } else {
-                        user = UserManager.addFavoriteDrink(to: user, drink: drink)
+                        guard let user = networkManager.user else {
+                            return
+                        }
+                        networkManager.user = UserManager.addFavoriteDrink(to: user, drink: drink)
                     }
                 }) {
                     Image(systemName: isFavourite ? "heart.fill" : "heart")

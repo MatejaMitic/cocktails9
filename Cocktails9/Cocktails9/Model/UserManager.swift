@@ -16,24 +16,17 @@ class UserManager {
     static func saveUser(_ user: User) {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(user) {
-            userDefaults.set(encoded, forKey: userKey)
+            userDefaults.set(encoded, forKey: user.email)
         }
     }
     
     // Load user from UserDefaults
-    static func loadUser() -> User? {
-        if let savedUserData = userDefaults.data(forKey: userKey),
+    static func loadUser(email: String) -> User? {
+        if let savedUserData = userDefaults.data(forKey: email),
            let decodedUser = try? JSONDecoder().decode(User.self, from: savedUserData) {
             return decodedUser
         }
-        else {
-            let user =  User(email: "mockuser@example.com",
-                             username: "mockuser",
-                             password: "password123",
-                             favoriteCocktails: [])
-            UserManager.saveUser(user)
-            return user
-        }
+        return nil
     }
     
     

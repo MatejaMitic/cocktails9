@@ -8,7 +8,10 @@ struct RegisterView: View {
     @State private var alertMessage: String = ""
     @State private var showRegisterView: Bool = false
     @State private var currentImageName: String = "bela casa"
-    @AppStorage("currentUser") private var currentUserData: Data?
+    @Environment(\.dismiss) private var dismiss
+    @State private var navigateToMain: Bool = false;
+    
+    
     
     // Private function to retrieve user from UserDefaults
     private func getUser(for email: String) -> User? {
@@ -27,7 +30,6 @@ struct RegisterView: View {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(user) {
             UserDefaults.standard.set(encoded, forKey: user.email)
-            currentUserData = encoded
         }
     }
     
@@ -54,8 +56,9 @@ struct RegisterView: View {
         // Create new user with empty favorite cocktails list
         let newUser = User(email: email, username: username, password: password, favoriteCocktails: [])
         
-        // Save the new user
-        addUser(newUser)
+        UserManager.saveUser(newUser)
+        
+        LoginView.currentEmail = newUser.email
         
         email = ""
         username = ""
@@ -64,6 +67,10 @@ struct RegisterView: View {
         withAnimation {
             currentImageName = (currentImageName == "bela casa") ? "koka" : "bela casa"
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            navigateToMain = true //
+        }
+        
     }
     
     private func isValidEmail(_ email: String) -> Bool {
@@ -120,7 +127,7 @@ struct RegisterView: View {
                     .animation(.easeInOut, value: currentImageName)
                 
                 Button(action: {
-                    showRegisterView = true
+                    dismiss()
                 }) {
                     Text("Already have an account? Login")
                         .foregroundColor(.blue)
@@ -128,8 +135,13 @@ struct RegisterView: View {
                         .padding(.top)
                 }
                 .navigationDestination(isPresented: $showRegisterView) {
-                    Text("Login View Goes Here")
+                    
                 }
+                .navigationDestination(isPresented: $navigateToMain) {
+                    MainTabView()
+                        .navigationBarBackButtonHidden(true)
+                }
+                
                 .padding(.top)
             }
             .padding(.horizontal, 20)
