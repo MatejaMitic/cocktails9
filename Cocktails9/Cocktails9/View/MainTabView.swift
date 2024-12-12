@@ -10,12 +10,9 @@ import SwiftUI
 struct MainTabView: View {
     var body: some View {
         NavigationStack {
-            VStack {
-                TopRowView()
-                    
-                BottomRowView()
-            }
-            .background(Color.green.opacity(0.2))
+            BottomRowView()
+                .background(Color.green.opacity(0.2))
+            
         }
     }
 }

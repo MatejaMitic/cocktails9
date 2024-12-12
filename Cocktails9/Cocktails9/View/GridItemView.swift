@@ -2,10 +2,11 @@ import SwiftUI
 
 struct GridItemView: View {
     @State var drink: Drink
-    @StateObject var networkManager = NetworkManager.shared
+    @StateObject var appData = AppDataManager.shared
+
     
     var body: some View {
-        let isFavourite = networkManager.user?.favoriteCocktails.contains(where: { $0.id == drink.id }) ?? false
+        let isFavourite = appData.user?.favoriteCocktails.contains(where: { $0.id == drink.id }) ?? false
         VStack(alignment: .leading) {
             AsyncImage(url: URL(string: drink.imageUrl)) { image in
                 image.resizable().scaledToFit()
@@ -28,21 +29,15 @@ struct GridItemView: View {
                 Spacer()  // Push the favorite button to the right side
                 
                 Button(action: {
+                    guard let user = appData.user else { return }
                     if isFavourite {
-                        guard let user = networkManager.user else {
-                            return
-                        }
-                        networkManager.user = UserManager.removeFavoriteDrink(from: user, drink: drink)
+                        appData.user = UserManager.removeFavoriteDrink(from: user, drink: drink)
                     } else {
-                        guard let user = networkManager.user else {
-                            return
-                        }
-                        networkManager.user = UserManager.addFavoriteDrink(to: user, drink: drink)
+                        appData.user = UserManager.addFavoriteDrink(to: user, drink: drink)
                     }
                 }) {
                     Image(systemName: isFavourite ? "heart.fill" : "heart")
                         .foregroundColor(isFavourite ? .red : .gray)
-                        //.padding(5)  
                 }
             }
             .padding(.top, 5)  // Padding between the name and the heart button

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct FavoritesView: View {
-    @StateObject private var networkManager = NetworkManager.shared
+    @StateObject private var appData = AppDataManager.shared
     
     let columns = [
         GridItem(.flexible()),
@@ -12,7 +12,7 @@ struct FavoritesView: View {
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
-                    if let user = networkManager.user {
+                    if let user = appData.user {
                         ForEach(user.favoriteCocktails) { drink in
                             NavigationLink {
                                 // Navigation to a detail page (not implemented yet)
@@ -33,7 +33,7 @@ struct FavoritesView: View {
         
         .onAppear {
             Task {
-                networkManager.user = UserManager.loadUser(email: LoginView.currentEmail)
+                appData.user = UserManager.loadUser(email: AppDataManager.currentEmail)
             }
         }
     }
@@ -41,5 +41,4 @@ struct FavoritesView: View {
 
 #Preview {
     DrinksGrid()
-        .environmentObject(NetworkManager())
 }

@@ -50,11 +50,9 @@ struct BottomRowView: View {
                         ProfileView()
                             .tag(2)
                     }
-//                    .toolbarBackground(.clear, for: .tabBar)
-                        .toolbarBackground(.hidden, for: .tabBar)
-//                        .toolbarColorScheme(.dark, for: .tabBar)
+                    .toolbarBackground(.hidden, for: .tabBar)
                 }
-
+                
             }
         }
         ZStack{
