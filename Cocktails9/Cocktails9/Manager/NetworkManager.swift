@@ -1,10 +1,14 @@
 import Foundation
 
 class NetworkManager {
+    // Private base URL and endpoints
+    private static let baseUrl = "https://www.thecocktaildb.com/api/json/v1/1"
+    private static let alcoholicEndpoint = "/filter.php?a=Alcoholic"
+    private static let searchEndpoint = "/search.php?s="
     
-    // Fetch alcoholic drinks (the default method)
+    // Fetch alcoholic drinks
     static func fetchDrinks() async {
-        guard let url = URL(string: "https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Alcoholic") else { return }
+        guard let url = URL(string: baseUrl + alcoholicEndpoint) else { return }
         
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
@@ -21,7 +25,7 @@ class NetworkManager {
     // Search cocktails based on query
     static func searchCocktails(query: String) async {
         guard !query.isEmpty,
-              let url = URL(string: "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")") else {
+              let url = URL(string: baseUrl + searchEndpoint + (query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")) else {
                   return
               }
         

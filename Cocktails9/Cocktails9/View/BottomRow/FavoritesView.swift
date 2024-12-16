@@ -40,5 +40,5 @@ struct FavoritesView: View {
 }
 
 #Preview {
-    DrinksGrid()
+    DrinksGridView()
 }

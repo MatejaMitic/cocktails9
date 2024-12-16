@@ -43,7 +43,7 @@ struct LoginView: View {
                 }) {
                     Text("Login")
                         .frame(width: 100, height: 45)
-                        .background(Color.blue)
+                        .background(.blue)
                         .foregroundColor(.white)
                         .cornerRadius(8)
                         .padding(.top)
@@ -79,7 +79,7 @@ struct LoginView: View {
             }
             .padding(.top, 150)
             .padding(.horizontal, 20)
-            .background(Color.green.opacity(0.2))
+            .background(.green.opacity(0.2))
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Login Failed"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
             }

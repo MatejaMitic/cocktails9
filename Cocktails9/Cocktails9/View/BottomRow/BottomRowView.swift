@@ -38,8 +38,7 @@ struct BottomRowView: View {
             ZStack(alignment: .bottom){
                 TabView(selection: $selectedTab) {
                     Group {
-                        //HomeView()
-                        DrinksGrid()
+                        DrinksGridView()
                             .background(Color.green.opacity(0.2))
                             .tag(0)
                         

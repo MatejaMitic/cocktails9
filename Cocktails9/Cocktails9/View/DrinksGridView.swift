@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct DrinksGrid: View {
+struct DrinksGridView: View {
     @StateObject private var appData = AppDataManager.shared // Shared AppDataManager
     @State private var searchQuery: String = ""  // For holding search text
     @State private var isFiltering: Bool = false  // For handling filter state
@@ -150,5 +150,5 @@ struct DrinksGrid: View {
 }
 
 #Preview {
-    DrinksGrid()
+    DrinksGridView()
 }
