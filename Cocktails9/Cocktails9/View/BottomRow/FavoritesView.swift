@@ -14,9 +14,7 @@ struct FavoritesView: View {
                 LazyVGrid(columns: columns, spacing: 20) {
                     if let user = appData.user {
                         ForEach(user.favoriteCocktails) { drink in
-                            NavigationLink {
-                                // Navigation to a detail page (not implemented yet)
-                            } label: {
+                            NavigationLink(destination: CocktailDetailView(drinkId: drink.id)) {
                                 GridItemView(drink: drink)
                             }
                         }

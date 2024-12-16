@@ -8,6 +8,8 @@ struct DrinksGridView: View {
     @State private var errorMessage: String? = nil // For handling API errors
     @State private var isSearchBarActive: Bool = false // To control visibility of the search bar
     
+    @State private var isFilterViewPresented: Bool = false  // State to trigger filter view presentation
+    
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
@@ -29,7 +31,7 @@ struct DrinksGridView: View {
             }
         }
     }
-
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -65,8 +67,8 @@ struct DrinksGridView: View {
                     
                     // Filter Button
                     Button(action: {
-                        isFiltering.toggle()
-                        print("Filter tapped, is filtering: \(isFiltering)")
+                        // Toggle the state to show the FilterView sheet
+                        isFilterViewPresented.toggle()
                     }) {
                         Image(systemName: "line.horizontal.3.decrease.circle")
                             .font(.title)
@@ -101,7 +103,7 @@ struct DrinksGridView: View {
                     .padding(.horizontal)
                     .transition(.move(edge: .top))  // Smooth transition for the search bar
                 }
-
+                
                 // Show loading indicator while fetching data
                 if isLoading {
                     ProgressView("Searching...")
@@ -120,9 +122,7 @@ struct DrinksGridView: View {
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 20) {
                         ForEach(appData.drinks) { drink in
-                            NavigationLink {
-                                // Navigation to a detail page (not implemented yet)
-                            } label: {
+                            NavigationLink(destination: CocktailDetailView(drinkId: drink.id)) {
                                 GridItemView(drink: drink)
                             }
                         }
@@ -138,12 +138,16 @@ struct DrinksGridView: View {
                         .padding()
                 }
             }
-        }
-        .onAppear {
-            // Load initial drinks when view appears
-            Task {
-                AppDataManager.shared.user = UserManager.loadUser(email: AppDataManager.currentEmail)
-                await NetworkManager.fetchDrinks() // Load the default alcoholic drinks when the view appears
+            .onAppear {
+                // Load initial drinks when view appears
+                Task {
+                    AppDataManager.shared.user = UserManager.loadUser(email: AppDataManager.currentEmail)
+                    await NetworkManager.fetchDrinks() // Load the default alcoholic drinks when the view appears
+                }
+            }
+            // Show the filter view as a modal sheet
+            .sheet(isPresented: $isFilterViewPresented) {
+                //FilterView(isFiltering: $isFiltering) // Pass the binding to `FilterView`
             }
         }
     }
