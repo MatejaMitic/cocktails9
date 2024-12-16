@@ -168,6 +168,7 @@ struct RegisterView: View {
                 Alert(title: Text("Registration Status"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
             }
             .animation(.easeInOut(duration: 0.5), value: currentImageName)
+            
         }
     }
 }

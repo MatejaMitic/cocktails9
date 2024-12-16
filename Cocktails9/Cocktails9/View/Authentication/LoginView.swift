@@ -76,6 +76,11 @@ struct LoginView: View {
                     MainTabView()
                         .navigationBarBackButtonHidden(true)
                 }
+                .navigationDestination(isPresented: $navigateToMain) {
+                    MainTabView()
+                        .navigationBarBackButtonHidden(true)
+                }
+                
             }
             .padding(.top, 150)
             .padding(.horizontal, 20)
@@ -111,7 +116,7 @@ struct LoginView: View {
             alertMessage = "Invalid credentials. Please try again."
             showAlert = true
         } else {
-            alertMessage = "No user found. Please register first."
+            alertMessage = "No users found. Please register first."
             showAlert = true
         }
         
