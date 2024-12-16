@@ -76,10 +76,7 @@ struct LoginView: View {
                     MainTabView()
                         .navigationBarBackButtonHidden(true)
                 }
-                .navigationDestination(isPresented: $navigateToMain) {
-                    MainTabView()
-                        .navigationBarBackButtonHidden(true)
-                }
+            
                 
             }
             .padding(.top, 150)
