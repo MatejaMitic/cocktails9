@@ -1,25 +1,16 @@
-//
-//  ContentView.swift
-//  Cocktails9
-//
-//  Created by Mateja Mitic on 26.11.24..
-//
-
 import SwiftUI
 
-struct MainTabView: View {
+struct ContentView: View {
+    
     var body: some View {
-        NavigationStack {
-            VStack {
-                TopRowView()
-                
-                BottomRowView()
-            }
-            .background(Color.green.opacity(0.2))
-        }
+        LoginView()
     }
 }
 
-#Preview {
-    MainTabView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+            .previewLayout(.sizeThatFits)
+    }
 }
+

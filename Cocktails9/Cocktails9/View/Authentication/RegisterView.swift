@@ -10,7 +10,8 @@ struct RegisterView: View {
     @State private var currentImageName: String = "bela casa"
     @Environment(\.dismiss) private var dismiss
     @State private var navigateToMain: Bool = false;
-
+    
+    
     
     // Private function to retrieve user from UserDefaults
     private func getUser(for email: String) -> User? {
@@ -52,9 +53,12 @@ struct RegisterView: View {
             return
         }
         
-        let newUser = User(email: email, username: username, password: password)
+        // Create new user with empty favorite cocktails list
+        let newUser = User(email: email, username: username, password: password, favoriteCocktails: [])
         
         UserManager.saveUser(newUser)
+        
+        AppDataManager.shared.user?.email = newUser.email
         
         email = ""
         username = ""
@@ -78,27 +82,45 @@ struct RegisterView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("RegiStar")
+                Text("Regi")
                     .font(.system(size: 60, weight: .black, design: .rounded))
-                    .padding(.bottom, 40)
+                    .foregroundColor(.primary)
+                + Text("Star")
+                    .font(.system(size: 60, weight: .black, design: .rounded))
+                    .foregroundColor(.red.opacity(0.8))
+                
                 
                 TextField("Email", text: $email)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(12)
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
-                    .padding(.bottom, 20)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom)
                     .accessibilityLabel("Email Address")
                 
                 TextField("Username", text: $username)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(12)
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
-                    .padding(.bottom, 20)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom)
                     .accessibilityLabel("Username")
                 
                 SecureField("Password", text: $password)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.bottom, 30)
+                    .padding(12)
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom)
                     .accessibilityLabel("Password")
                 
                 Button(action: {
@@ -137,6 +159,7 @@ struct RegisterView: View {
                     MainTabView()
                         .navigationBarBackButtonHidden(true)
                 }
+                
                 .padding(.top)
             }
             .padding(.horizontal, 20)
