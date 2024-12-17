@@ -14,7 +14,7 @@ class NetworkManager {
     private static let ingredientEndpoint = "/list.php?i=list"
     private static let alcoholicFilterEndpoint = "/list.php?a=list"
     
-    // Fetch alcoholic drinks
+    // Fetch alcoholic drinks by default
     static func fetchDrinks() async {
         guard let url = URL(string: baseUrl + alcoholicEndpoint) else { return }
         
@@ -27,6 +27,24 @@ class NetworkManager {
             }
         } catch {
             print("Failed to fetch drinks: \(error)")
+        }
+    }
+    
+    // Fetch drinks based on filter query
+    static func fetchDrinksByFilter(query: String) async {
+        guard let url = URL(string: baseUrl + "/filter.php?\(query)") else {
+            return
+        }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decoder = JSONDecoder()
+            let decodedResponse = try decoder.decode(DrinkResponse.self, from: data)
+            DispatchQueue.main.async {
+                AppDataManager.shared.drinks = decodedResponse.drinks
+            }
+        } catch {
+            print("Failed to fetch filtered drinks: \(error)")
         }
     }
     

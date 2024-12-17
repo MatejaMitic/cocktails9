@@ -7,6 +7,9 @@ struct FilterViewDetail: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
 
+    // Closure to pass the selected filter option back to the parent view
+    var applyFilter: (String?) -> Void
+    
     var body: some View {
         VStack {
             Text("Select \(filterType)")
@@ -25,6 +28,7 @@ struct FilterViewDetail: View {
                 List(options, id: \.self) { option in
                     Button(action: {
                         selectedOption = option
+                        applyFilter(option) // Call the closure to pass the selected option back
                     }) {
                         HStack {
                             Text(option)
@@ -83,6 +87,8 @@ struct FilterViewDetail: View {
 
 struct FilterViewDetail_Previews: PreviewProvider {
     static var previews: some View {
-        FilterViewDetail(filterType: "Alcoholic / Non-Alcoholic")
+        FilterViewDetail(filterType: "Alcoholic / Non-Alcoholic") { selectedOption in
+            print("Selected: \(selectedOption ?? "None")")
+        }
     }
 }

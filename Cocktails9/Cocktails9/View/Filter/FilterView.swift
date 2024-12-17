@@ -1,8 +1,16 @@
 import SwiftUI
 
 struct FilterView: View {
-    @State private var isFilterViewDetailPresented = false
-    @State private var filterType: String?
+    @State private var selectedAlcoholic: String? = nil
+    @State private var selectedGlass: String? = nil
+    @State private var selectedCategory: String? = nil
+    @State private var selectedIngredients: String? = nil
+    
+    @State private var isFilterViewPresented = false
+    @State private var filterTypeToPresent: String = "Alcoholic / Non-Alcoholic"
+
+    // Closure to pass the updated filters back to DrinksGridView
+    var applyFilters: ((String?, String?, String?, String?) -> Void)?
 
     var body: some View {
         NavigationStack {
@@ -10,10 +18,10 @@ struct FilterView: View {
                 // Alcoholic / Non-Alcoholic Section
                 Section(header: Text("Alcoholic / Non-Alcoholic")) {
                     Button(action: {
-                        filterType = "Alcoholic / Non-Alcoholic"
-                        isFilterViewDetailPresented.toggle()
+                        filterTypeToPresent = "Alcoholic / Non-Alcoholic"
+                        isFilterViewPresented.toggle()
                     }) {
-                        Text("Select Alcoholic Type")
+                        Text(selectedAlcoholic ?? "Select Alcoholic Type")
                             .foregroundColor(.blue)
                             .padding()
                             .background(Color.gray.opacity(0.1), in: RoundedRectangle(cornerRadius: 8))
@@ -23,10 +31,10 @@ struct FilterView: View {
                 // Glass Used Section
                 Section(header: Text("Glass Used")) {
                     Button(action: {
-                        filterType = "Glass Used"
-                        isFilterViewDetailPresented.toggle()
+                        filterTypeToPresent = "Glass Used"
+                        isFilterViewPresented.toggle()
                     }) {
-                        Text("Select Glass Type")
+                        Text(selectedGlass ?? "Select Glass Type")
                             .foregroundColor(.blue)
                             .padding()
                             .background(Color.gray.opacity(0.1), in: RoundedRectangle(cornerRadius: 8))
@@ -36,10 +44,10 @@ struct FilterView: View {
                 // Category Section
                 Section(header: Text("Category")) {
                     Button(action: {
-                        filterType = "Category"
-                        isFilterViewDetailPresented.toggle()
+                        filterTypeToPresent = "Category"
+                        isFilterViewPresented.toggle()
                     }) {
-                        Text("Select Category")
+                        Text(selectedCategory ?? "Select Category")
                             .foregroundColor(.blue)
                             .padding()
                             .background(Color.gray.opacity(0.1), in: RoundedRectangle(cornerRadius: 8))
@@ -49,10 +57,10 @@ struct FilterView: View {
                 // Ingredients Section
                 Section(header: Text("Ingredients")) {
                     Button(action: {
-                        filterType = "Ingredients"
-                        isFilterViewDetailPresented.toggle()
+                        filterTypeToPresent = "Ingredients"
+                        isFilterViewPresented.toggle()
                     }) {
-                        Text("Select Ingredients")
+                        Text(selectedIngredients ?? "Select Ingredients")
                             .foregroundColor(.blue)
                             .padding()
                             .background(Color.gray.opacity(0.1), in: RoundedRectangle(cornerRadius: 8))
@@ -60,18 +68,27 @@ struct FilterView: View {
                 }
             }
             .navigationTitle("Filters")
-            .sheet(isPresented: $isFilterViewDetailPresented) {
-                // Show FilterViewDetail when a category is selected
-                if let filterType = filterType {
-                    FilterViewDetail(filterType: filterType)
+            .sheet(isPresented: $isFilterViewPresented) {
+                // Passing the applyFilters closure to FilterViewDetail
+                FilterViewDetail(filterType: filterTypeToPresent ?? "") { selectedOption in
+                    // Update the selected filter based on user choice
+                    switch filterTypeToPresent {
+                    case "Alcoholic / Non-Alcoholic":
+                        selectedAlcoholic = selectedOption
+                    case "Glass Used":
+                        selectedGlass = selectedOption
+                    case "Category":
+                        selectedCategory = selectedOption
+                    case "Ingredients":
+                        selectedIngredients = selectedOption
+                    default:
+                        break
+                    }
+                    
+                    // Apply filters and pass them back to DrinksGridView
+                    applyFilters?(selectedAlcoholic, selectedGlass, selectedCategory, selectedIngredients)
                 }
             }
         }
-    }
-}
-
-struct FilterView_Previews: PreviewProvider {
-    static var previews: some View {
-        FilterView()
     }
 }
