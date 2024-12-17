@@ -86,11 +86,7 @@ struct ProfileView: View {
                     
                     if isEditingUsername {
                         TextField("Enter new username", text: $editedUsername)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.horizontal)
-                            .padding(.vertical, 10)
-                            .background(RoundedRectangle(cornerRadius: 10).stroke(Color.blue, lineWidth: 2))
-                            .padding(.bottom)
+                            .customTextFieldStyle(borderColor: .blue)
                         
                         Button(action: {
                             // Save new username
@@ -139,11 +135,7 @@ struct ProfileView: View {
                     
                     if isEditingPassword {
                         SecureField("Enter new password", text: $editedPassword)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.horizontal)
-                            .padding(.vertical, 10)
-                            .background(RoundedRectangle(cornerRadius: 10).stroke(Color.blue, lineWidth: 2))
-                            .padding(.bottom)
+                            .customTextFieldStyle(borderColor: .blue)
                         
                         Button(action: {
                             // Save new password
