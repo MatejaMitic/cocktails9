@@ -12,5 +12,5 @@ struct User: Codable {
     var username: String
     var password: String
     var favoriteCocktails: [Drink]
-    
+    var profilePhotoData: Data?
 }
