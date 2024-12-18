@@ -1,10 +1,3 @@
-//
-//  FilterModel.swift
-//  Cocktails9
-//
-//  Created by Mateja Mitic on 16.12.24..
-//
-
 import Foundation
 
 // Response model for filter lists (categories, glasses, ingredients, etc.)
@@ -16,4 +9,3 @@ struct FilterResponse: Codable {
 struct FilterOption: Codable {
     var name: String
 }
-

@@ -7,7 +7,7 @@ struct CocktailDetailView: View {
     var body: some View {
         ScrollView {
             // Cocktail Thumbnail Image
-            AsyncImage(url: URL(string: viewModel.cocktail?.strDrinkThumb ?? "")) { image in
+            AsyncImage(url: URL(string: viewModel.drinkDetail?.drinkThumb ?? "")) { image in
                 image.resizable()
                     .scaledToFit()
                     .frame(height: 300)
@@ -21,28 +21,27 @@ struct CocktailDetailView: View {
             .padding(.top)
             
             VStack(alignment: .leading, spacing: 20) {
-                // Cocktail Name and Alcoholic Category
-                if let cocktail = viewModel.cocktail {
+                if let cocktail = viewModel.drinkDetail {
                     HStack {
-                        Text(cocktail.strDrink)
+                        Text(cocktail.drink)
                             .font(.title)
                             .fontWeight(.bold)
                         
                         Spacer()
                         
-                        Text(cocktail.strAlcoholic ?? "Unknown")
+                        Text(cocktail.alcoholic ?? "Unknown")
                             .font(.subheadline)
-                            .foregroundColor(cocktail.strAlcoholic == "Alcoholic" ? .green : .orange)
+                            .foregroundColor(cocktail.alcoholic == "Alcoholic" ? .green : .orange)
                     }
                     
                     // Glass and Category Information
                     HStack {
-                        if let glass = cocktail.strGlass {
+                        if let glass = cocktail.glass {
                             Text("Glass: \(glass)")
                                 .font(.subheadline)
                         }
                         Spacer()
-                        if let category = cocktail.strCategory {
+                        if let category = cocktail.category {
                             Text("Category: \(category)")
                                 .font(.subheadline)
                         }
@@ -71,7 +70,7 @@ struct CocktailDetailView: View {
                     Text("Instructions")
                         .font(.title2)
                         .padding(.top)
-                    Text(cocktail.strInstructions)
+                    Text(cocktail.instructions)
                         .font(.body)
                         .padding(.bottom)
                 }
@@ -79,7 +78,7 @@ struct CocktailDetailView: View {
             .padding()
         }
         .background(.green.opacity(0.2))
-        .navigationTitle(viewModel.cocktail?.strDrink ?? "Cocktail Details")
+        .navigationTitle(viewModel.drinkDetail?.drink ?? "Cocktail Details")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             viewModel.fetchCocktailDetails(id: drinkId)
