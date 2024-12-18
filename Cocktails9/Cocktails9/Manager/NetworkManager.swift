@@ -77,7 +77,7 @@ class NetworkManager {
             endpoint = categoryEndpoint
         case .glass:
             endpoint = glassEndpoint
-        case .ingredient:
+        case .ingredients:
             endpoint = ingredientEndpoint
         }
         
@@ -100,14 +100,6 @@ class NetworkManager {
             return .failure(error)
         }
     }
-}
-
-// Enum for Filter Types
-enum FilterType {
-    case alcoholic
-    case category
-    case glass
-    case ingredient
 }
 
 // Custom error handling

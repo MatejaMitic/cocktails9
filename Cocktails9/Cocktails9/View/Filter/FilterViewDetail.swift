@@ -66,7 +66,7 @@ struct FilterViewDetail: View {
             case "Category":
                 filterTypeEnum = .category
             case "Ingredients":
-                filterTypeEnum = .ingredient
+                filterTypeEnum = .ingredients
             default:
                 filterTypeEnum = .alcoholic
             }
