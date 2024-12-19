@@ -30,6 +30,24 @@ class NetworkManager {
         }
     }
     
+    static func fetchCocktailDetails(id: String) async throws -> DrinkDetails? {
+        let urlString = baseUrl + "/lookup.php?i=\(id)"
+        
+        guard let url = URL(string: urlString) else {
+            throw URLError(.badURL)
+        }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decoder = JSONDecoder()
+            let decodedResponse = try decoder.decode(DrinkDetailsResponse.self, from: data)
+            return decodedResponse.drinks?.first // Return the first cocktail if available
+        } catch {
+            throw error // Re-throw the error to be handled by the caller
+        }
+    }
+    
+    
     // Fetch drinks based on filter query
     static func fetchDrinksByFilter(query: String) async {
         guard let url = URL(string: baseUrl + "/filter.php?\(query)") else {
