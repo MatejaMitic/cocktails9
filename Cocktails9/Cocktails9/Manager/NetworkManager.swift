@@ -1,12 +1,20 @@
 import Foundation
 
 class NetworkManager {
+    
     // Private base URL and endpoints
     private static let baseUrl = "https://www.thecocktaildb.com/api/json/v1/1"
     private static let alcoholicEndpoint = "/filter.php?a=Alcoholic"
+    private static let nonAlcoholicEndpoint = "/filter.php?a=Non_Alcoholic"
     private static let searchEndpoint = "/search.php?s="
     
-    // Fetch alcoholic drinks
+    // New endpoints for fetching filter options
+    private static let categoryEndpoint = "/list.php?c=list"
+    private static let glassEndpoint = "/list.php?g=list"
+    private static let ingredientEndpoint = "/list.php?i=list"
+    private static let alcoholicFilterEndpoint = "/list.php?a=list"
+    
+    // Fetch alcoholic drinks by default
     static func fetchDrinks() async {
         guard let url = URL(string: baseUrl + alcoholicEndpoint) else { return }
         
@@ -19,6 +27,24 @@ class NetworkManager {
             }
         } catch {
             print("Failed to fetch drinks: \(error)")
+        }
+    }
+    
+    // Fetch drinks based on filter query
+    static func fetchDrinksByFilter(query: String) async {
+        guard let url = URL(string: baseUrl + "/filter.php?\(query)") else {
+            return
+        }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decoder = JSONDecoder()
+            let decodedResponse = try decoder.decode(DrinkResponse.self, from: data)
+            DispatchQueue.main.async {
+                AppDataManager.shared.drinks = decodedResponse.drinks
+            }
+        } catch {
+            print("Failed to fetch filtered drinks: \(error)")
         }
     }
     
@@ -41,56 +67,55 @@ class NetworkManager {
         }
     }
     
-    static func fetchFilteredDrinks(endpoint: String) async {
-        guard let url = URL(string: baseUrl + endpoint) else { return }
+    // Fetch list of filter options dynamically based on filter type
+    static func fetchFilterOptions(filter: FilterType) async -> Result<[String], Error> {
+        let endpoint: String
+        switch filter {
+        case .alcoholic:
+            endpoint = alcoholicFilterEndpoint
+        case .category:
+            endpoint = categoryEndpoint
+        case .glass:
+            endpoint = glassEndpoint
+        case .ingredients:
+            endpoint = ingredientEndpoint
+        }
+        
+        guard let url = URL(string: baseUrl + endpoint) else {
+            return .failure(NetworkError.invalidURL)
+        }
         
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let decoder = JSONDecoder()
-            let decodedResponse = try decoder.decode(DrinkResponse.self, from: data)
-            DispatchQueue.main.async {
-                AppDataManager.shared.drinks = decodedResponse.drinks ?? [] // Update the shared data
+            let decodedResponse: [String: [[String: String]]] = try decoder.decode([String: [[String: String]]].self, from: data)
+            
+            guard let drinks = decodedResponse["drinks"] else {
+                return .failure(NetworkError.decodingError)
             }
+            
+            let options = drinks.compactMap { $0.values.first }
+            return .success(options)
         } catch {
-            print("Failed to fetch filtered drinks: \(error)")
+            return .failure(error)
         }
     }
+}
+
+// Custom error handling
+enum NetworkError: Error, LocalizedError {
+    case invalidURL
+    case networkError
+    case decodingError
     
-    static func fetchList(endpoint: String) async throws -> [String] {
-        guard let url = URL(string: baseUrl + "/" + endpoint) else {
-            throw URLError(.badURL)
-        }
-        
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            let decoder = JSONDecoder()
-            
-            // Since each list (categories, glasses, etc.) is wrapped in a dictionary, decode it accordingly
-            let response = try decoder.decode(FilterResponse.self, from: data)
-            
-            // Return the list of strings (e.g., categories, glasses, etc.)
-            return response.drinks?.map { $0.name } ?? []
-        } catch {
-            print("Failed to fetch list: \(error)")
-            throw error
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return "The URL is invalid."
+        case .networkError:
+            return "There was a problem with the network."
+        case .decodingError:
+            return "Failed to decode the response."
         }
     }
-    
-    static func fetchCocktailDetails(id: String) async throws -> DrinkDetails? {
-            let urlString = baseUrl + "/lookup.php?i=\(id)"
-            
-            guard let url = URL(string: urlString) else {
-                throw URLError(.badURL)
-            }
-            
-            do {
-                let (data, _) = try await URLSession.shared.data(from: url)
-                let decoder = JSONDecoder()
-                let decodedResponse = try decoder.decode(DrinkDetailsResponse.self, from: data)
-                return decodedResponse.drinks?.first // Return the first cocktail if available
-            } catch {
-                throw error // Re-throw the error to be handled by the caller
-            }
-        }
-    
 }

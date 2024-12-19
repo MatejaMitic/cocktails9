@@ -1,12 +1,11 @@
 import SwiftUI
 
 struct DrinksGridView: View {
-    @StateObject private var appData = AppDataManager.shared // Shared AppDataManager
-    @State private var searchQuery: String = ""  // For holding search text
-    @State private var isFiltering: Bool = false  // For handling filter state
-    @State private var isLoading: Bool = false    // To show loading indicator
-    @State private var errorMessage: String? = nil // For handling API errors
-    @State private var isSearchBarActive: Bool = false // To control visibility of the search bar
+    @StateObject private var appData = AppDataManager.shared
+    @State private var searchQuery: String = ""
+    @State private var isLoading: Bool = false
+    @State private var errorMessage: String? = nil
+    @State private var isSearchBarActive: Bool = false
     
     @State private var isFilterViewPresented: Bool = false  // State to trigger filter view presentation
     
@@ -48,11 +47,9 @@ struct DrinksGridView: View {
                     // Search Button
                     Button(action: {
                         if isSearchBarActive {
-                            // If the search bar is already active, hide it and perform the search
                             isSearchBarActive = false
-                            searchCocktails()
+                            // Perform search action here
                         } else {
-                            // If the search bar is not active, show it
                             withAnimation {
                                 isSearchBarActive.toggle()
                             }
@@ -73,13 +70,11 @@ struct DrinksGridView: View {
                         Image(systemName: "line.horizontal.3.decrease.circle")
                             .font(.title)
                             .foregroundColor(.primary)
+                            .padding()
                     }
-                    
                 }
-                .background(Color.clear)
                 .padding(.top)
                 .padding(.horizontal)
-                .padding(.trailing)
                 
                 if isSearchBarActive {
                     HStack {
@@ -111,7 +106,7 @@ struct DrinksGridView: View {
                         .padding()
                 }
                 
-                // Show error message if needed (e.g., no cocktails found)
+                // Show error message if needed
                 if let errorMessage = errorMessage {
                     Text(errorMessage)
                         .foregroundColor(.red)
@@ -151,8 +146,4 @@ struct DrinksGridView: View {
             }
         }
     }
-}
-
-#Preview {
-    DrinksGridView()
 }
