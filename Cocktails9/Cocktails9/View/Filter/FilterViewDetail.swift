@@ -15,6 +15,7 @@ struct FilterViewDetail: View {
             Text("Select \(filterType)")
                 .font(.title)
                 .padding()
+                .foregroundColor(.primary) // Ensures the text is easy to read
 
             if isLoading {
                 ProgressView("Loading...")
@@ -32,14 +33,20 @@ struct FilterViewDetail: View {
                     }) {
                         HStack {
                             Text(option)
+                                .foregroundColor(.primary) // Text color
+
+                            Spacer()
+
+                            // Checkmark icon for selected option
                             if option == selectedOption {
-                                Spacer()
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundColor(.blue)
                             }
                         }
                         .padding()
+                        .background(Color.green.opacity(0.2), in: RoundedRectangle(cornerRadius: 10))  // Green background with opacity for each list item
                     }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
             
@@ -49,6 +56,7 @@ struct FilterViewDetail: View {
         .onAppear {
             loadOptions()
         }
+        .background(Color.green.opacity(0.2).edgesIgnoringSafeArea(.all)) // Green background with opacity for the whole view
     }
 
     private func loadOptions() {

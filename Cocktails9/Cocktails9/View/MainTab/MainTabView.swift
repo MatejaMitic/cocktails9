@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct BottomRowView: View {
+struct MainTabView: View {
     @State var selectedTab = 0
     
     enum TabbedItems: Int, CaseIterable{
@@ -73,7 +73,7 @@ struct BottomRowView: View {
     }
 }
 
-extension BottomRowView{
+extension MainTabView{
     func CustomTabItem(imageName: String, title: String, isActive: Bool) -> some View{
         HStack(spacing: 10){
             Spacer()
@@ -96,6 +96,6 @@ extension BottomRowView{
 
 #Preview {
     NavigationStack {
-        BottomRowView()
+        MainTabView()
     }
 }

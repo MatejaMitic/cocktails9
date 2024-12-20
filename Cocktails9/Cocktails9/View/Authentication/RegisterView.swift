@@ -156,8 +156,8 @@ struct RegisterView: View {
                     
                 }
                 .navigationDestination(isPresented: $navigateToMain) {
-                    BottomRowView()
-                        //.backgroundColor(.green.opacity(0.2))
+                    MainTabView()
+                        .background(.green.opacity(0.2))
                         .navigationBarBackButtonHidden(true)
                 }
                 

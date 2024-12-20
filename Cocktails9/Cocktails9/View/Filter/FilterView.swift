@@ -27,7 +27,6 @@ struct FilterView: View {
                 Section(header: Text("Alcoholic / Non-Alcoholic")) {
                     Button {
                         filterTypeToPresent = .alcoholic
-
                     } label: {
                         Text(selectedAlcoholic ?? "Select Alcoholic Type")
                             .foregroundColor(.blue)
@@ -92,5 +91,7 @@ struct FilterView: View {
                 }
             })
         }
+        .background(Color.green.opacity(0.2).edgesIgnoringSafeArea(.all)) // Apply green background with opacity 0.2
     }
 }
+

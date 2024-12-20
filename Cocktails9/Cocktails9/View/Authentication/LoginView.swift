@@ -74,6 +74,7 @@ struct LoginView: View {
                 }
                 .navigationDestination(isPresented: $navigateToMain) {
                     MainTabView()
+                        .background(.green.opacity(0.2))
                         .navigationBarBackButtonHidden(true)
                 }
             
@@ -103,7 +104,7 @@ struct LoginView: View {
                 }
                 
                 // Simulate a delay for the animation and then navigate to the main screen
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     navigateToMain = true // Trigger navigation to the main screen after animation
                 }
                 

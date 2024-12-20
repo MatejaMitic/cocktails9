@@ -19,6 +19,22 @@ struct DrinksGridView: View {
         GridItem(.flexible())
     ]
     
+    private func searchCocktails() {
+        guard !searchQuery.isEmpty else { return }
+        
+        isLoading = true  // Start loading
+        errorMessage = nil // Clear previous error message
+        
+        // Perform the search API call asynchronously
+        Task {
+            await NetworkManager.searchCocktails(query: searchQuery) // Fetch drinks based on query
+            isLoading = false  // Stop loading
+            if appData.drinks.isEmpty {
+                errorMessage = "No cocktails found." // If no results are found, show a message
+            }
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -60,6 +76,29 @@ struct DrinksGridView: View {
                 }
                 .padding(.top)
                 .padding(.horizontal)
+                
+                if isSearchBarActive {
+                    HStack {
+                        TextField("Search Cocktails", text: $searchQuery)
+                            .padding(8)
+                            .background(Color.gray.opacity(0.2), in: RoundedRectangle(cornerRadius: 8))
+                            .onSubmit {
+                                searchCocktails()
+                            }
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                        Button(action: {
+                            isSearchBarActive = false  // Dismiss the search bar and keyboard
+                            searchCocktails()
+                        }) {
+                            Text("Search")
+                                .fontWeight(.bold)
+                                .foregroundColor(.blue)
+                        }
+                    }
+                    .padding(.horizontal)
+                    .transition(.move(edge: .top))  // Smooth transition for the search bar
+                }
                 
                 // Show loading indicator while fetching data
                 if isLoading {
