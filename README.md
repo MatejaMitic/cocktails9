@@ -8,8 +8,6 @@
   4. [API / Networking](#4-api--networking)  
   5. [Search & Filtering](#5-search--filtering)  
 - [Example Usage](#example-usage)  
-- [How to Compile and Run](#how-to-compile-and-run)  
-- [Future Enhancements](#future-enhancements)  
 
 ---
 
